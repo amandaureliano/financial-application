@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Type {
+  physical
+  virtual
+}
+
+model User {
+  id            String    @id @db.Uuid @default(uuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+
+  name          String    @db.VarChar()
+  document      String    @db.VarChar() @unique
+  password      String    @db.VarChar()
+
+  accounts      Account[]
+
+  @@map("users")
+}
+
+model Account {
+  id            String      @id @db.Uuid @default(uuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
+
+  userId        String      @db.Uuid
+  user          User        @relation(fields: [userId], references: [id])
+  branch        String      @db.VarChar()
+  account       String      @db.VarChar()
+
+  cards         Card[]
+  transactions  Transaction[]
+
+  @@unique([branch, account])
+  @@map("accounts")
+}
+
+model Card {
+  id            String      @id @db.Uuid @default(uuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
+
+  accountId     String      @db.Uuid
+  account       Account     @relation(fields: [accountId], references: [id])
+  type          Type
+  number        String      @db.VarChar() @unique
+  cvv           String      @db.VarChar()
+
+  @@map("cards")
+}
+
+model Transaction {
+  id            String      @id @db.Uuid @default(uuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
+
+  accountId     String      @db.Uuid
+  account       Account     @relation(fields: [accountId], references: [id])
+  value         Int
+  description   String      @db.VarChar()
+
+  @@map("transactions")
+}
