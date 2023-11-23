@@ -31,7 +31,7 @@ export class TransactionsRepository {
       skip
     })
 
-    const totalCount = await prisma.transaction.count({ where: { accountId } })
+    const totalCount = await prisma.transaction.count({ where: { accountId, description: { contains: search, mode: 'insensitive' }, value: typeFilter } })
     return { transactions, totalCount }
   }
 
