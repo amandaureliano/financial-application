@@ -1,11 +1,10 @@
 import { z } from 'zod'
-import { type Response } from 'express'
+import { Request, Response } from 'express'
 import { RegisterService } from '../services/register-account'
 import { AccountsRepository } from '../repositories/accounts-repository'
 import { fromZodError } from 'zod-validation-error'
-import { CustomRequest } from '../middlewares/verify-jwt'
 
-export async function registerAccount (req: CustomRequest, res: Response) {
+export async function registerAccount (req: Request, res: Response) {
   const accountsRepository = new AccountsRepository()
   const registerService = new RegisterService(accountsRepository)
 
@@ -20,7 +19,7 @@ export async function registerAccount (req: CustomRequest, res: Response) {
     return res.status(400).send(fromZodError(accountSchema.error))
   } else {
     const { branch, account } = accountSchema.data
-    const accountCreated = await registerService.execute({ branch, account, userId: req.id })
+    const accountCreated = await registerService.execute({ branch, account, userId: req.userId })
 
     return res.status(201).send(accountCreated)
   }

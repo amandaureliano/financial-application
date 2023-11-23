@@ -1,4 +1,4 @@
-## ✨ **API - Aplicação Financeira**
+## ✨ **Aplicação Financeira**
 
 <center>
 

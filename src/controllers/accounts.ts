@@ -1,11 +1,10 @@
-import { type Response } from 'express'
+import { Request, Response } from 'express'
 import { z } from 'zod'
 import { FetchService } from '../services/fetch-accounts'
 import { AccountsRepository } from '../repositories/accounts-repository'
 import { fromZodError } from 'zod-validation-error'
-import { CustomRequest } from '../middlewares/verify-jwt'
 
-export async function accounts (req: CustomRequest, res: Response) {
+export async function accounts (req: Request, res: Response) {
   const accountsRepository = new AccountsRepository()
   const listService = new FetchService(accountsRepository)
 
@@ -22,7 +21,7 @@ export async function accounts (req: CustomRequest, res: Response) {
     const currentPage = Number(result.data.currentPage)
     const itemsPerPage = Number(result.data.itemsPerPage)
 
-    const data = await listService.execute({ itemsPerPage, currentPage, userId: req.id })
+    const data = await listService.execute({ itemsPerPage, currentPage, userId: req.userId })
 
     return res.status(200).send(data)
   }

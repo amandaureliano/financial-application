@@ -2,11 +2,13 @@ import { NextFunction, Request, Response } from 'express'
 import { env } from 'process'
 import jwt from 'jsonwebtoken'
 
-export interface CustomRequest extends Request {
-  id: string
+declare module 'jsonwebtoken' {
+  export interface UserIDJwtPayload extends jwt.JwtPayload {
+      id: string
+  }
 }
 
-export async function verifyJWT(req: CustomRequest, res: Response, next: NextFunction) {
+export async function verifyJWT(req: Request, res: Response, next: NextFunction) {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '')
 
@@ -14,7 +16,8 @@ export async function verifyJWT(req: CustomRequest, res: Response, next: NextFun
       throw new Error()
     }
 
-    req.id = jwt.verify(token, env.JWT_SECRET).id
+    const jwtPayload = <jwt.UserIDJwtPayload>jwt.verify(token, env.JWT_SECRET)
+    req.userId = jwtPayload.id
 
     next()
   } catch (error) {
