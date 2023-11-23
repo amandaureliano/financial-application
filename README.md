@@ -16,6 +16,12 @@ Clone o projeto
 git clone git@github.com:amandaureliano/financial-application.git
 ```
 
+Entre no diretório do projeto
+
+```bash
+cd financial-application
+```
+
 Instale as dependências do projeto
 
 ```bash
@@ -31,7 +37,7 @@ cp .env.example .env
 Rode a imagem do docker
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Rode as migrações do prisma
