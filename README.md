@@ -16,13 +16,25 @@ Clone o projeto
 git clone git@github.com:amandaureliano/financial-application.git
 ```
 
+Instale as dependências do projeto
+
+```bash
+npm install
+```
+
+Crie o arquivo .env que possibilita que sejam adicionadas as variáveis de ambiente do projeto
+
+```bash
+cp .env.example .env
+```
+
 Rode a imagem do docker
 
 ```bash
 docker-compose up -d
 ```
 
-Rode as migrações
+Rode as migrações do prisma
 
 ```bash
 npm run migration:run
